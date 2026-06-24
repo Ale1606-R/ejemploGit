@@ -1,6 +1,7 @@
 # Proyecto PHP
 
 Este repositorio contiene un proyecto PHP genérico que puede servir como base para aplicaciones web, APIs o herramientas de línea de comandos.
+Primera modificacion del desarrolador A
 
 ## Características
 
