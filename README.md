@@ -4,7 +4,7 @@ Este repositorio contiene un proyecto PHP genérico que puede servir como base p
 Primera modificacion del desarrolador A
 esta linea fue escrita por el desarrollador Agit add
 BALABALABALANALALALAKDKSAJKBWKJEFBJK
-
+bjbbgjhbjubhjbhjbh
 ## Características
 
 - Estructura básica de proyecto para PHP
