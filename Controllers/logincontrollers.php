@@ -3,25 +3,42 @@
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
-    require_once dirname(__DIR__) . "/Config/conexion.php";
-    
-    $usuario = mysqli_real_escape_string($conexion, $_POST['usuario']);
-    $clave   = mysqli_real_escape_string($conexion, $_POST['clave']);
-    
-    $query = "SELECT * FROM usuario WHERE usuario = '$usuario' AND clave = '$clave'";
-    $resultado = mysqli_query($conexion , $query);
-    
-    if ($resultado && mysqli_num_rows($resultado) == 1) {
-        $_SESSION['usuario'] = $usuario;
+
+    // Cambiamos la ruta para que suba una carpeta y busque en Config
+    require_once "../Config/conexion.php";
+
+    // Recibir los datos directamente del formulario
+    $usuario = $_POST['usuario'] ?? '';
+    $clave   = $_POST['clave'] ?? '';
+
+    try {
+        // Con PDO usamos consultas preparadas, lo que hace el sistema súper seguro
+        $query = "SELECT * FROM usuario WHERE usuario = :usuario AND clave = :clave";
+        $stmt = $conexion->prepare($query);
         
-        // Redirección limpia al dashboard
-        header("Location: ../views/Dashboard.php");
-        exit();
-    } else {
-        // Mensaje controlado si los datos fallan
-        header("Location: ../views/login.php?error=1");
-        exit();
+        // Enlazamos los datos de las cajitas de texto
+        $stmt->bindParam(':usuario', $usuario);
+        $stmt->bindParam(':clave', $clave);
+        $stmt->execute();
+
+        // Buscamos si existe la fila en la base de datos
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            // Guardamos el usuario en la sesión
+            $_SESSION['usuario'] = $row['usuario'];
+            
+            // Redirección limpia al dashboard (Nota la V mayúscula de Views)
+            header("Location: ../Views/Dashboard.php");
+            exit();
+        } else {
+            // Mensaje controlado si los datos fallan
+            header("Location: ../Views/login.php?error=1");
+            exit();
+        }
+
+    } catch (PDOException $e) {
+        die("Error en la consulta: " . $e->getMessage());
     }
 }
 ?>
