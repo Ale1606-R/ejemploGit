@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoGest - Panel de Control</title>
+    <title>Farmacia - Panel de Control</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; display: flex; }
         .sidebar { width: 250px; background: #2c3e50; color: white; height: 100vh; padding: 20px; }
@@ -15,7 +15,7 @@
 <body>
 
     <div class="sidebar">
-        <h2>AutoGest</h2>
+        <h2>Farmacia</h2>
         <p>Bienvenido, <strong><?php echo $_SESSION['usuario']; ?></strong></p>
         <hr>
         <a href="#">🚗 Acetaminofen</a>
@@ -29,7 +29,7 @@
         <h1>Panel de Control (Dashboard)</h1>
         <div class="card">
             <h3>Resumen del Sistema</h3>
-            <p>Aquí se gestionará todo el inventario de la alcaldía.</p>
+            <p>Aqui el control de la Farmacia.</p>
         </div>
     </div>
 

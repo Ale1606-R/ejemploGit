@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Con PDO usamos consultas preparadas, lo que hace el sistema súper seguro
-        $query = "SELECT * FROM usuario WHERE usuario = :usuario AND clave = :clave";
+        $query = "SELECT * FROM usuarios WHERE Nombre_usuario = :usuario AND Clave_acceso = :clave";
         $stmt = $conexion->prepare($query);
         
         // Enlazamos los datos de las cajitas de texto
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($row) {
             // Guardamos el usuario en la sesión
-            $_SESSION['usuario'] = $row['usuario'];
+            $_SESSION['usuario'] = $row['Nombre_usuario'];
             
             // Redirección limpia al dashboard (Nota la V mayúscula de Views)
             header("Location: ../Views/Dashboard.php");
