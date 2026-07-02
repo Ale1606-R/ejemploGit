@@ -16,7 +16,7 @@
 
     <div class="sidebar">
         <h2>Farmacia</h2>
-        <p>Bienvenido, <strong><?php echo $_SESSION['usuario']; ?></strong></p>
+        <p>Bienvenido, <strong><?php echo $_SESSION['Nombre_usuario']; ?></strong></p>
         <hr>
         <a href="#">🚗 Acetaminofen</a>
         <a href="#">📋 Receta</a>

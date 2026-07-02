@@ -1,44 +1,62 @@
 <?php
-// ÚNICO session_start al principio del archivo
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    // 1. Forzar a que PHP nos muestre cualquier error oculto en la pantalla
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
 
-    // Cambiamos la ruta para que suba una carpeta y busque en Config
-    require_once "../Config/conexion.php";
+    require_once dirname(__DIR__) . "/Config/conexion.php";
+    
+    // Comprueba si la base de datos se conecto bien
+    if (!$conexion) {
+        die("Error crítico: No se pudo conectar a la base de datos MySQL. " . mysqli_connect_error());
+    }
+    
+    $usuario = mysqli_real_escape_string($conexion, $_POST['usuario']);
+    $clave   = mysqli_real_escape_string($conexion, $_POST['clave']);
+    
+    // Imprime que esta recibiendo php
+    echo "Intentando entrar con el Usuario: [" . $usuario . "] y la Clave: [" . $clave . "]<br>";
 
-    // Recibir los datos directamente del formulario
-    $usuario = $_POST['usuario'] ?? '';
-    $clave   = $_POST['clave'] ?? '';
+    $query = "SELECT * FROM usuarios WHERE Nombre_usuario = '$usuario' AND Clave_acceso = '$clave'";
+    $resultado = mysqli_query($conexion, $query);
+    
+    if (!$resultado) {
+        die("Error en la consulta SQL: " . mysqli_error($conexion));
+    }
 
-    try {
-        // Con PDO usamos consultas preparadas, lo que hace el sistema súper seguro
-        $query = "SELECT * FROM usuarios WHERE Nombre_usuario = :usuario AND Clave_acceso = :clave";
-        $stmt = $conexion->prepare($query);
-        
-        // Enlazamos los datos de las cajitas de texto
-        $stmt->bindParam(':usuario', $usuario);
-        $stmt->bindParam(':clave', $clave);
-        $stmt->execute();
+    $filas = mysqli_num_rows($resultado);
+    echo "Filas encontradas en la base de datos: " . $filas . "<br>";
 
-        // Buscamos si existe la fila en la base de datos
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($filas == 1) {
+        $datosusuario =mysqli_fetch_assoc($resultado);
 
-        if ($row) {
-            // Guardamos el usuario en la sesión
-            $_SESSION['usuario'] = $row['Nombre_usuario'];
-            
-            // Redirección limpia al dashboard (Nota la V mayúscula de Views)
-            header("Location: ../Views/Dashboard.php");
-            exit();
-        } else {
-            // Mensaje controlado si los datos fallan
-            header("Location: ../Views/login.php?error=1");
-            exit();
+        $_SESSION['Nombre_usuario'] = $usuario;
+
+        $_SESSION['Rol_sistema'] =$datosusuario['rol'];
+
+        switch($_SESSION['rol']){
+            case 'Administrador':
+            header("Location: ../views/dashboard.php");
+            break;
+
+            /*case 'Bodega':
+                header(); // La ruta de la interfaz del de bodega 
+                break;
+
+            /*case 'Cajero':
+                header(); // La ruta de la interfaz del de Cajero
+                break; */    
+
         }
 
-    } catch (PDOException $e) {
-        die("Error en la consulta: " . $e->getMessage());
+        header("Location: ../views/dashboard.php");
+        exit();
+    } else {
+        echo "<h3>La base de datos rechazó los datos porque no coinciden exactamente.</h3>";
+        echo "<a href='../views/login.php'>Volver a intentar</a>";
     }
 }
 ?>

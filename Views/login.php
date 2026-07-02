@@ -35,7 +35,7 @@
                 Acceso al Sistema de Inventario de Farmacia
             </h2>
             
-            <form action="../controllers/loginfarmacia.php" method="POST">
+            <form action="../controllers/logincontrollers.php" method="POST">
                                                                 
  <div class="mb-3">
     <label for="usuario" class="form-label fw-semibold text-white">Nombre de Usuario</label>
@@ -44,7 +44,7 @@
         <span class="input-group-text bg-secondary text-white border-0" style="background-color: #f2f4f5 !important;">
             👤
         </span>
-        <input type="text" id="usuario" name="Nombre_usuario" placeholder="Nombre de Usuario" class="form-control" required autocomplete="off">
+        <input type="text" id="usuario" name="usuario" placeholder="Nombre de Usuario" class="form-control" required autocomplete="off">
     </div>
 </div>
 
@@ -55,7 +55,7 @@
         <span class="input-group-text bg-secondary text-white border-0" style="background-color: #f2f4f5 !important;">
             🔑
         </span>
-        <input type="password" id="clave" name="Clave_acceso" placeholder="Contraseña" class="form-control" required>
+        <input type="password" id="clave" name="clave" placeholder="Contraseña" class="form-control" required>
     </div>
 </div>
                 
